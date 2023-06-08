@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Dtn Parking Manager Login</title>
+</head>
+<body>
+    @if (!Request.IsAuthenticated)
+    {<!-- If the user is not authenticated, display the sign-in button -->
+        <center>
+                <div class="card bg-light mb-3" style="max-width:25rem;">
+  
+                    <div class="card-body">
+                        <p class="card-text">
+                            <img src="~/images/IconNoText.png" style="width:50%; height:50%"/>
+                            <h3>Manila Parking Manager</h3>
+                            <h6>powered by <strong>DTN</strong></h6><br />
+                            <p class="lead">Your gateway to convinient parking solutions</p>
+                            <a href="@Url.Action("SignIn", "Home")" style="text-decoration: none;">
+                                <button type="button" class="btn btn-primary btn-lg" style="width:100%">Continue with Microsoft</button>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </center>
+      }
+
+      else{
+        <span><br />Hello <strong>@System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name").Value</strong></span>
+        <br /><br />
+        @Html.ActionLink("Profile", "Index", "Profile")
+        <br /><br />
+        @Html.ActionLink("Sign out", "SignOut", "Home")
+    }
+    @if (!string.IsNullOrWhiteSpace(Request.QueryString["errormessage"]))
+    {
+<div style="background-color:red;color:white;font-weight: bold;">Error: @Request.QueryString["errormessage"]</div>}
+</body>
+</html>

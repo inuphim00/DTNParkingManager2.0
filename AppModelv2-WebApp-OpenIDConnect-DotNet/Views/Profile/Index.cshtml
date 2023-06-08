@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Sign-In with Microsoft Sample</title>
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+</head>
+<body style="padding:50px">
+        <div class="card bg-secondary mb-3" style="max-width:25rem;">
+            <div class="card-body">
+                <center>
+                    <div class="initial-avatar"></div><br>
+                    <h6 class="card-title"><strong>@ViewBag.Name</strong></h6>
+                </center>
+                <p class="card-text">
+                    <strong>Email:</strong>@ViewBag.Username<br />
+                    <strong>Plate Number:</strong>
+                    <br />
+                    <strong>Contact Number:</strong>
+                    <br />
+                    <strong>Vehicle:</strong>
+                </p>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    <br />
+    <br />
+    <br />
+    @Html.ActionLink("Back", "Index", "Home", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Sign out", "SignOut", "Home", null, new { @class = "btn btn-danger" })
+</body>
+</html>
