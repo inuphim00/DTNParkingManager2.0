@@ -1,44 +1,96 @@
 ﻿
 @{
     ViewBag.Title = "Index";
+    if (!Request.IsAuthenticated)
+    {
+        Layout = null;
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
-
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Dtn Parking Manager Login</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
     @if (!Request.IsAuthenticated)
     {<!-- If the user is not authenticated, display the sign-in button -->
         <center>
-                <div class="card bg-light mb-3" style="max-width:25rem;">
-  
-                    <div class="card-body">
-                        <p class="card-text">
-                            <img src="~/images/IconNoText.png" style="width:50%; height:50%"/>
-                            <h3>Manila Parking Manager</h3>
-                            <h6>powered by <strong>DTN</strong></h6><br />
-                            <p class="lead">Your gateway to convinient parking solutions</p>
-                            <a href="@Url.Action("SignIn", "Home")" style="text-decoration: none;">
-                                <button type="button" class="btn btn-primary btn-lg" style="width:100%">Continue with Microsoft</button>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-            </center>
-      }
+            <div class="card border-secondary mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width:25rem;margin-top:10%;">
 
-      else{
-        <span><br />Hello <strong>@System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name").Value</strong></span>
-        <br /><br />
-        @Html.ActionLink("Profile", "Index", "Profile")
-        <br /><br />
-        @Html.ActionLink("Sign out", "SignOut", "Home")
+                <div class="card-body">
+                    <p class="card-text">
+                        <img src="~/images/IconNoText.png" style="width:50%; height:50%" />
+                        <h3>Manila Parking Manager</h3>
+                        <h6>powered by <strong>DTN</strong></h6><br />
+                    <p class="lead">Your gateway to convinient parking solutions</p>
+                    <a href="@Url.Action("SignIn", "Home")" style="text-decoration: none;">
+                        <button type="button" class="btn btn-primary btn-lg" style="width:100%">Continue with Microsoft</button>
+                    </a>
+                    </p>
+                </div>
+            </div>
+        </center>
+    }
+
+    else
+    {
+
+        //<span><br />Hello <strong>@System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name").Value</strong></span>
+        <center>
+        @section Scripts{
+            <script>
+                Swal.fire({
+                    title: 'New User Setup',
+                    text: "As part of DTN parking manager we need you to setup your information",
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok'
+                //if user clicked ok display the questions
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //start of questions
+                        Swal.mixin({
+                            input: 'text',
+                            confirmButtonText: 'Next',
+                            showCancelButton: false,
+                            progressSteps: ['1', '2', '3']
+                         }).queue([
+                            {
+                                title: 'Contact Number',
+                                text: 'Please ensure to input the correct contact number as we will use it to contact you in case of emergency.'
+                            },
+                            'Vehicle Type',
+                            'Plate Number'
+                        ]).then((result) => {
+                            if (result.value) {
+                                const answers = JSON.stringify(result.value)
+                                Swal.fire({
+                                    title: 'All done!',
+                                    html: `
+                                        Your answers:
+                                        <pre><code>${answers}</code></pre>
+                                      `,
+                                    confirmButtonText: 'Lovely!'
+                                })
+                            }
+                        })
+                        //end of questions
+                    }
+                })
+                </script>}
+            </center>
+        //TODO: render the parking spaces
     }
     @if (!string.IsNullOrWhiteSpace(Request.QueryString["errormessage"]))
     {
-<div style="background-color:red;color:white;font-weight: bold;">Error: @Request.QueryString["errormessage"]</div>}
+        <div style="background-color:red;color:white;font-weight: bold;">Error: @Request.QueryString["errormessage"]</div>}
 </body>
 </html>
